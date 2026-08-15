@@ -811,6 +811,62 @@
       .card-detail { max-height: none !important; }
       .awards-collapse { max-height: none !important; }
     }
+
+    /* ===== Lightbox ===== */
+    .lightbox-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.92); z-index: 99999;
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .lightbox-overlay.active { display: flex; opacity: 1; }
+    .lightbox-img {
+      max-width: 90vw; max-height: 85vh; object-fit: contain;
+      border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      animation: lightboxZoom 0.3s ease;
+    }
+    @keyframes lightboxZoom {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .lightbox-close {
+      position: fixed; top: 20px; right: 24px;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: #fff; font-size: 1.5rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s ease; z-index: 100000;
+    }
+    .lightbox-close:hover {
+      background: rgba(255,80,80,0.6); border-color: rgba(255,255,255,0.6);
+      transform: scale(1.1) rotate(90deg);
+    }
+    .lightbox-close i { font-size: 1.3rem; }
+    .lightbox-label {
+      position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.7); font-size: 0.85rem; font-family: 'Poppins', sans-serif;
+      z-index: 100000; pointer-events: none; white-space: nowrap;
+    }
+    .lightbox-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.25);
+      color: #fff; font-size: 1.3rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s ease; z-index: 100000;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.25); transform: translateY(-50%) scale(1.1); }
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+    @media (max-width: 768px) {
+      .lightbox-close { top: 12px; right: 12px; width: 40px; height: 40px; }
+      .lightbox-nav { width: 40px; height: 40px; }
+      .lightbox-prev { left: 12px; }
+      .lightbox-next { right: 12px; }
+      .lightbox-label { font-size: 0.75rem; top: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -1099,7 +1155,7 @@
           </div>
           <h3 class="card-title">2026年（第二十届）中国品牌节与青年论坛</h3>
           <p class="card-journal">2026 (20th) China Brand Festival & Youth Forum</p>
-          <p class="card-brief">作为中国品牌青年领袖（全国4名）在贵宾席位参加开幕式，见证第十届全国人大常委会副委员长顾秀莲、第十二届全国政协副主席刘晓峰两位国家领导人致辞。受邀与京东原副总裁李曦闭门一对一交流，参加品牌青年之夜·青年领袖酒会。<br>As China Brand Youth Leader (4 nationwide), attended the opening ceremony in the VIP section, witnessing addresses by Gu Xiulian (Vice Chairperson, 10th NPC Standing Committee) and Liu Xiaofeng (Vice Chairman, 12th CPPCC). Invited to a closed-door one-on-one exchange with Li Xi (former VP, JD.com) and attended the Brand Youth Night · Youth Leaders Reception.</p>
+          <p class="card-brief">作为中国品牌青年领袖（全国4名）在贵宾席位参加开幕式，见证第十届全国人大常委会副委员长顾秀莲、第十二届全国政协副主席刘晓峰两位国家领导人致辞。受邀与京东原副总裁李曦闭门一对一交流，参加品牌青年之夜·青年领袖酒会。个人领奖事迹与照片被中华网、人民政协网等官方媒体报道。<br>As China Brand Youth Leader (4 nationwide), attended the opening ceremony in the VIP section, witnessing addresses by Gu Xiulian (Vice Chairperson, 10th NPC Standing Committee) and Liu Xiaofeng (Vice Chairman, 12th CPPCC). Invited to a closed-door one-on-one exchange with Li Xi (former VP, JD.com) and attended the Brand Youth Night · Youth Leaders Reception. Personal award ceremony and photos were covered by official media including China.com and CPPCC News Network.</p>
           <span class="card-expand-btn">查看详情 / View Details <i class="fas fa-arrow-right"></i></span>
         </div>
         <div class="card-detail">
@@ -5331,20 +5387,6 @@
     }, { threshold: 0.1 });
     fadeIns.forEach(el => fadeObserver.observe(el));
 
-    // ============ Contact Form ============
-    function sendMessage(e) {
-      e.preventDefault();
-      const form = e.target;
-      const name = form.querySelector('input[type="text"]').value;
-      const email = form.querySelector('input[type="email"]').value;
-      const subject = form.querySelectorAll('input[type="text"]')[1].value;
-      const message = form.querySelector('textarea').value;
-      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
-      const mailto = `mailto:jiangbolong2023@163.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
-      showToast('邮件已打开 / Email Opened', 'jiangbolong2023@163.com');
-    }
-
     // ============ Toast Notification ============
     function showToast(title, content) {
       // Remove existing toast
@@ -5402,29 +5444,133 @@
 
     // ============ Download CV ============
     function downloadCV() {
-      // 尝试下载真实 PDF 文件（如果存在）
-      // 部署时把简历 PDF 命名为 resume.pdf 放在仓库根目录即可
-      const link = document.createElement('a');
-      link.href = 'resume.pdf';
-      link.download = '姜博茏_简历.pdf';
-      link.click();
-      // 如果 PDF 不存在，浏览器会显示 404。
-      // 请参考对话中的说明上传 resume.pdf 文件。
+      // 直接在新标签打开 resume.pdf，用户可右键另存
+      // GitHub Pages 上 download 属性对同源文件生效，但 window.open 更可靠
+      window.open('resume.pdf', '_blank');
     }
 
     // ============ Contact Form ============
     function sendMessage(e) {
       e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
+      const form = e.target;
+      const name = form.querySelector('input[type="text"]').value;
+      const email = form.querySelector('input[type="email"]').value;
+      const subject = form.querySelectorAll('input[type="text"]')[1].value;
+      const message = form.querySelector('textarea').value;
+      const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
+      const mailto = `mailto:jiangbolong2023@163.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+      const btn = form.querySelector('button[type="submit"]');
       const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-check"></i> 发送成功！';
+      btn.innerHTML = '<i class="fas fa-check"></i> 邮件已打开 / Email Opened';
       btn.style.background = 'linear-gradient(135deg, #14b8a6, #6366f1)';
-      e.target.reset();
+      form.reset();
       setTimeout(() => {
         btn.innerHTML = original;
         btn.style.background = '';
       }, 3000);
     }
+  </script>
+
+  <!-- ===== Lightbox ===== -->
+  <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox(event)">
+    <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); lightboxNav(-1)" title="上一张 / Previous">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="lightbox-label" id="lightboxLabel"></div>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+    <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); lightboxNav(1)" title="下一张 / Next">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="lightbox-close" onclick="event.stopPropagation(); closeLightbox()" title="关闭 / Close">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <script>
+    // ===== Lightbox JS =====
+    var lightboxImages = [];
+    var lightboxIndex = 0;
+
+    function collectLightboxImages() {
+      lightboxImages = [];
+      var imgs = document.querySelectorAll('img');
+      imgs.forEach(function(img) {
+        var parent = img.closest('.lightbox-overlay');
+        if (parent) return;
+        var src = img.src;
+        if (!src || src.indexOf('data:') === 0) return;
+        var inPhotoContainer = img.closest('.card-detail-img') ||
+                               img.closest('.card-photos') ||
+                               img.closest('.company-photos') ||
+                               img.closest('.about-photo') ||
+                               img.closest('.hero-photo');
+        if (!inPhotoContainer) return;
+        var caption = '';
+        var captionEl = img.parentElement.parentElement.querySelector('.card-detail-img-caption');
+        if (captionEl) caption = captionEl.textContent.trim();
+        lightboxImages.push({ src: src, caption: caption });
+      });
+    }
+
+    function openLightbox(imgElement) {
+      collectLightboxImages();
+      var src = imgElement.src;
+      lightboxIndex = 0;
+      for (var i = 0; i < lightboxImages.length; i++) {
+        if (lightboxImages[i].src === src) {
+          lightboxIndex = i;
+          break;
+        }
+      }
+      showLightboxImage();
+      document.getElementById('lightboxOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function showLightboxImage() {
+      if (lightboxImages.length === 0) return;
+      var item = lightboxImages[lightboxIndex];
+      document.getElementById('lightboxImg').src = item.src;
+      var labelEl = document.getElementById('lightboxLabel');
+      var captionText = item.caption || '';
+      labelEl.textContent = (captionText ? captionText + '  ·  ' : '') +
+        (lightboxIndex + 1) + ' / ' + lightboxImages.length +
+        '  ·  点击左右箭头切换 / Use arrows to navigate';
+    }
+
+    function closeLightbox(event) {
+      if (event && event.target && event.target.id !== 'lightboxOverlay' && event.target.classList.contains('lightbox-img')) return;
+      document.getElementById('lightboxOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function lightboxNav(dir) {
+      if (lightboxImages.length === 0) return;
+      lightboxIndex += dir;
+      if (lightboxIndex < 0) lightboxIndex = lightboxImages.length - 1;
+      if (lightboxIndex >= lightboxImages.length) lightboxIndex = 0;
+      showLightboxImage();
+    }
+
+    document.addEventListener('keydown', function(e) {
+      var overlay = document.getElementById('lightboxOverlay');
+      if (!overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+      if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var photoContainers = document.querySelectorAll('.card-detail-img img, .card-photos img, .company-photos img, .about-photo img, .hero-photo img');
+      photoContainers.forEach(function(img) {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openLightbox(img);
+        });
+      });
+    });
   </script>
 </body>
 </html>
